@@ -1,0 +1,49 @@
+采用方法：
+1、暴力搜索（不解释）
+2、哈希法
+
+哈希法：建立一个哈希表，遍历nums，对每一个元素nums[i]，查看targets - nums[i]是否在表中，若在，返回它的下标和 i，若不在，将（nums[i],i）存入哈希表
+
+std::unordered_map 是一个关联容器，其中的元素根据键来引用，而不是根据索引来引用
+在内部，std::unordered_map中的元素不会根据其键值或映射值按任何特定顺序排序，二是根据其哈希值组织到桶中，以允许通过键值直接快速访问各元素。
+std::unordered_map 中的元素的键是唯一的
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int,int> record;
+        vector<int> res;
+        int size = nums.size();
+        for(int i=0 ; i < size ; i++){
+            int tmp = target - nums[i];
+            if(record.find(tmp) != record.end()){
+                res.push_back(record[tmp]);
+                res.push_back(i);
+                break;
+            }else
+                record[nums[i]]=i;
+        }
+        return res;
+    }
+};
+
+unordered_map.find()返回值：An iterator to the element, if the specified key value is found, or unordered_map::end if the specified key 
+is not found in the container.
+但若数组中出现两个同样的值，就会出现问题。
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        map<int,int> a;//提供一对一的hash
+        vector<int> b(2,-1);//用来承载结果，初始化一个大小为2，值为-1的容器b
+        for(int i=0;i<nums.size();i++)
+        {
+            if(a.count(target-nums[i])>0)
+            {
+                b[0]=a[target-nums[i]];
+                b[1]=i;
+                break;
+            }
+            a[nums[i]]=i;//反过来放入map中，用来获取结果下标
+        }
+        return b;
+    };
+};
