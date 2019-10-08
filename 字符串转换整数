@@ -1,0 +1,53 @@
+class Solution {
+public:
+    int myAtoi(string str) {
+        int len = str.size();
+        bool fstnn = false;//记录第一个非空字符是否找到且为‘+’‘-’或数字
+        bool pn = true;//正负号
+        bool exec = false;//判断是否已经取到过第一位数
+        int ans = 0;//最终结果
+        char cr;//读取的每一位字符
+        int wei;//每一位数字
+        for(int i = 0; i < len; i++){
+            cr = str[i];
+            wei = cr - '0';
+            if(!fstnn && (cr == ' ' || cr == ' ')) continue;
+            else {
+                if(fstnn == false && cr == '-') {//第一个非空字符是负号
+                    fstnn = true;//发现第一个非空字符
+                    pn = false;//负号
+                }
+                else if(fstnn == false && cr == '+'){fstnn = true;}//第一个非空字符是正号
+                else if(cr >= '0' && cr <= '9' && (!fstnn || !exec) ) {//发现数字，若该数字是第一个非空字符或者虽然不是第一个非空字符但是我们的结果还没有取到过第一位数字
+                    fstnn = true;
+                    ans = - wei;//负数表示范围的绝对值比正数大1，我们统一先用负数表示结果
+                    exec = true;//表示已经取到了一位数字
+                }
+                else if(!fstnn) return 0;//第一个非空字符非正负号和数字，非法表达，返回0。
+                else if(exec && !(cr >= '0' && cr <= '9' )) break;//在已经取到至少一位数的情况下发现后面是其他字符，说明数字结束，跳出循环
+                else if(exec && cr >= '0' && cr <= '9' ){
+                    if((ans < INT_MIN/10 || ans == INT_MIN/10 && cr >= '8') && pn == false) return INT_MIN;//判断本次操作是否会溢出
+                    else if((ans < INT_MIN/10 || ans == INT_MIN/10 && cr >= '7') && pn == true) return INT_MAX;
+                    else ans = ans * 10 - wei;
+                }
+                else break;
+            }
+        }
+        if(pn == true) ans = -ans;//如果是正数，取反
+        return ans;
+    }
+};
+
+
+
+
+用标准库的话
+class Solution {
+public:
+    int myAtoi(string str) {
+        int digit=0;
+        istringstream is(str);
+        is>>digit;
+        return digit;
+    }
+};
