@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool isValid(string s) {
+        vector<char> charstack;
+        int size = s.size();
+        for(int i = 0 ; i < size ; i++){
+            char tmp = s[i];
+            if(tmp == '(' || tmp == '[' || tmp == '{') charstack.push_back(tmp);
+            else if(charstack.empty()) return false;
+            else if(tmp == ')'){
+                if(charstack.back() != '(' ) return false;
+                else charstack.pop_back();
+            }
+            else if(tmp == ']'){
+                if(charstack.back() != '[' ) return false;
+                else charstack.pop_back();                
+            }
+            else if(tmp == '}'){
+                if(charstack.back() != '{' ) return false;  
+                else charstack.pop_back();              
+            }
+        }
+        if(charstack.empty()) return true;
+        else return false;
+    }
+};
