@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int hsize = haystack.size();
+        int nsize = needle.size();
+        vector<int> posbuffer(256,-1) ;
+        for(int i = 0 ; i < nsize ; i++){
+            posbuffer[needle[i]] = i;
+        }
+        int i = 0 , j = 0;
+        while(i <= hsize - nsize){
+            for(j = 0 ; j < nsize ; j++){
+                if(haystack[i + j] != needle[j]){
+                    int tmp = posbuffer[haystack[i + nsize]];
+                    if(tmp != -1 ){
+                        i = i + nsize - tmp;
+                        break;
+                    }
+                    else{
+                        i = i + nsize + 1;
+                        break;
+                    }
+                }
+                
+            }
+            if(j == nsize) return i;
+        }
+        return -1;
+    }
+};
