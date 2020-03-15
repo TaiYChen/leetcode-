@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if(intervals.size()<=1) return intervals;
+        sort(intervals.begin(),intervals.end());
+        
+        vector<vector<int>> result; 
+        result.push_back(intervals[0]);
+        int i2,lefte,lefti,righte,righti;
+        for(int i1 = 1; i1 < intervals.size() ; i1++)
+        {
+            i2 = result.size() - 1;
+            lefti = intervals[i1][0];
+            righti = intervals[i1][1];
+            lefte = result[i2][0];
+            righte = result[i2][1];  
+            //printf("i1: %d, i2: %d\n%d,%d,,%d,%d\n",i1,i2,lefti,righti,lefte,righte);                  
+            if(lefti > righte) {
+                result.push_back(intervals[i1]);
+            }
+            else{
+                result[i2][0] = lefte;
+                result[i2][1] = righti > righte? righti : righte ;
+                //printf("i1:%d,i2:%d     %d,%d\n",i1,i2,result[i2][0],result[i2][1]);
+            }
+        }
+
+        return result;
+
+        /*
+        int i1=0;
+        for(int i2 = 1; i2 < intervals.size() ; i2++)
+        {
+            //printf("i1: %d, i2: %d\n%d,%d,,%d,%d\n",i1,i2,lefti,righti,lefte,righte);                  
+            if(intervals[i1][1] >= intervals[i2][0]) {
+                intervals[i1][1] = max(intervals[i1][1],intervals[i2][1]);
+            }
+            else{
+                intervals[++i1] = intervals[i2];
+            }
+        }
+        intervals.resize(i1+1);
+        return intervals;
+        */
+    }
+};
+
+/*执行用时 :16 ms, 在所有 C++ 提交中击败了94.49%的用户
+内存消耗 :14.9 MB, 在所有 C++ 提交中击败了17.69%的用户*/
